@@ -1,9 +1,15 @@
-﻿using System;
+﻿/*Prgram Name: LANGHAM HOTELS MANAGEMENT SYSTEAM
+ * Developer: Zih Hao Huang
+ * Date:2/10/2022
+ * Algorithm
+ * 1. create list
+ * 2. Implements its function according to the list, except for billing
+ * 3. Increase the backup function and implement it
+*/
+
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IT502_A2_Programming1__764703669_1
 {
@@ -163,6 +169,7 @@ namespace IT502_A2_Programming1__764703669_1
             {
                 return false;
             }
+
             using (FileStream f = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 try
@@ -182,10 +189,11 @@ namespace IT502_A2_Programming1__764703669_1
 
                         streamWriter.Close();
                     }
+                    Console.Clear();
                 }
                 catch
                 {
-                    return false;
+                    return true;
                 }
             }
 
@@ -234,7 +242,8 @@ namespace IT502_A2_Programming1__764703669_1
             }
             else
             {
-                Console.WriteLine("The file is missing, please try again");
+                File.Copy(filePath, BackupfilePath);
+                Console.WriteLine("The file is Backup");
             }
         }
         static void Main(string[] args)
