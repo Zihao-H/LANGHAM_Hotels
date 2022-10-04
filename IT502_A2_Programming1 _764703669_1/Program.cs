@@ -189,7 +189,6 @@ namespace IT502_A2_Programming1__764703669_1
 
                         streamWriter.Close();
                     }
-                    Console.Clear();
                 }
                 catch
                 {
