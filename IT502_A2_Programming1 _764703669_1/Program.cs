@@ -1,4 +1,4 @@
-﻿/*Prgram Name: LANGHAM HOTELS MANAGEMENT SYSTEAM
+/*Prgram Name: LANGHAM HOTELS MANAGEMENT SYSTEAM
  * Developer: Zih Hao Huang
  * Date:2/10/2022
  * Algorithm
@@ -13,35 +13,36 @@ using System.IO;
 
 namespace IT502_A2_Programming1__764703669_1
 {
-    public class Room
+    public class Room// Custom Class - Room
     {
         public int Roomnum { get; set; }
     }
-    public class RoomAllocation
+    public class RoomAllocation// Custom Class - RoomAllocation
     {
         public int AllocationRoomNum { get; set; }
         public Guest AllocatedRoom { get; set; }
     }
-    public class Guest
+    public class Guest// Custom Class - Guest
     {
         public string GuestName { get; set; }
     }
-    internal class Program
-    {
+    internal class Program// Custom Main Class - Program
+    {// Variables declaration and initialization
         public static Room[] listofrooms;
         public static Guest[] listofgust;
-
+        
         public static List<RoomAllocation> listOfRoomAllocaltions = new List<RoomAllocation>();
         static void AddRooms()
         {
             try
-            {
+            {//Ask the user how many rooms they want and store them in listofrooms
                 Console.WriteLine("Please Enter How many Room you need:");
                 int numRoom = Convert.ToInt32(Console.ReadLine());
                 listofrooms = new Room[numRoom];
                 for (int i = 0; i < numRoom; i++)
-                {
+                {// Variables declaration
                     Room room = new Room();
+                    //Ask the user room number and store them in listofrooms
                     Console.WriteLine("Please Enter Room number :");
                     room.Roomnum = Convert.ToInt32(Console.ReadLine());
 
@@ -54,7 +55,7 @@ namespace IT502_A2_Programming1__764703669_1
         {
             try
             {
-                foreach (Room room in listofrooms)
+                foreach (Room room in listofrooms)//Read the room number and room number in listofrooms
                 {
                     Console.WriteLine("***********************************************\n");
                     Console.WriteLine(room.Roomnum + "\n");
@@ -73,12 +74,12 @@ namespace IT502_A2_Programming1__764703669_1
             Console.WriteLine("Allocate Room for Guest");
             {
                 try
-                {
+                {//Ask the user how many gust they want and store them in listofgust
                     Console.WriteLine("Please Enter How many Guest:");
                     int numGuest = Convert.ToInt32(Console.ReadLine());
                     listofgust = new Guest[numGuest];
                     for (int n = 0; n < numGuest; n++)
-                    {
+                    {// Ask user for guest name and assigned room number and save to listofgust
                         Guest guest = new Guest();
                         Console.WriteLine("Please Enter  Guest Name :");
                         guest.GuestName = Convert.ToString(Console.ReadLine());
@@ -165,11 +166,11 @@ namespace IT502_A2_Programming1__764703669_1
         public static string BackupfilePath;
         static bool SavetheRoomDetailsToaFile()
         {//Use Bool to determine whether there is data input listOfRoomAllocaltions
-            if (listOfRoomAllocaltions.Count <= 0)
+            if (listOfRoomAllocaltions.Count <= 0)//false if the data in listOfRoomAllocaltions is equal to zero
             {
                 return false;
             }
-
+            //use file and open
             using (FileStream f = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 try
@@ -178,40 +179,35 @@ namespace IT502_A2_Programming1__764703669_1
                     Console.WriteLine("Your file has been saved");
 
                     StreamWriter streamWriter = new StreamWriter(f);
+
                     DateTime now = DateTime.Now;
 
                     foreach (RoomAllocation roomAllocation in listOfRoomAllocaltions)
                     {
-
-
                         string strToAdd = "Room Number: \t" + roomAllocation.AllocationRoomNum + ", Guest Name: \t" + roomAllocation.AllocatedRoom.GuestName + "\t" + now;
                         streamWriter.WriteLine(strToAdd);
-
-                        streamWriter.Close();
                     }
+                    streamWriter.Close();
                 }
-                catch
+                catch//false if there are any errors
                 {
-                    return true;
+                    return false;
                 }
             }
-
             return true;
-
         }
         static void ShowtheRoomDetailsFromaFile()
         {
             try
-            {
+            {//Define file address and action
                 FileStream f = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 StreamReader streamReader = new StreamReader(f);
 
 
-
+                //Define line equal to the data read inside
                 string line = streamReader.ReadLine();
 
-                while (line != null)
-
+                while (line != null)//Output when Line is not equal to invalid
                 {
                     Console.WriteLine(line);
                     line = streamReader.ReadLine();
@@ -223,34 +219,35 @@ namespace IT502_A2_Programming1__764703669_1
         static void BackupTheFile()
         {//If there is a backup with the same name in the folder,
          //it will fail to create,
-         //so I added an if to detect if there is an old backup and delete it and create it
+         //so I added an if function to detect if there is an old backup files and delete it also create it
             if (File.Exists(BackupfilePath))
             {
                 try
-                {
+                {//If an existing backup is found, delete the backup and copy the original file to the backup and delete the original file
                     Console.WriteLine("Found that old backup files have been deleted And backup the new file");
                     File.Delete(BackupfilePath);
                     File.Copy(filePath, BackupfilePath);
                     File.Delete(filePath);
                 }
                 catch
-                {
+                {//If there is an error, the original file will be copied to the backup and the original file will be deleted
                     File.Copy(filePath, BackupfilePath);
-
+                    File.Delete(filePath);
                 }
             }
             else
-            {
+            {//No backup found will back up the original and delete the original
                 File.Copy(filePath, BackupfilePath);
+                File.Delete(filePath);
                 Console.WriteLine("The file is Backup");
             }
         }
-        static void Main(string[] args)
+        static void Main(string[] args)// Main function
         {
-            string folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            filePath = Path.Combine(folderpath, "Lhms_764703669.txt");
-            string folderpatha = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            BackupfilePath = Path.Combine(folderpatha, "Lhms_764703669_Backup.txt");
+            string folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);//define file address
+            filePath = Path.Combine(folderpath, "Lhms_764703669.txt");//Combine file address and define file name
+            string folderpatha = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);//define file address
+            BackupfilePath = Path.Combine(folderpatha, "Lhms_764703669_Backup.txt");//Combine file address and define file name
             char ans; int choice;
             try//If the user enters non-Y or y, an error will be displayed, please enter again
             {
@@ -317,6 +314,7 @@ namespace IT502_A2_Programming1__764703669_1
                                 break;
                             case 7:
                                 Console.Clear();
+                                // if false will show this information
                                 if (!SavetheRoomDetailsToaFile()) { Console.WriteLine("No information, please try again"); };
 
 
@@ -345,7 +343,7 @@ namespace IT502_A2_Programming1__764703669_1
                         Console.WriteLine("Please Enter Choice Number");
 
                     }
-                    //Ask every time will back to SWITCH
+                    //Ask user to continue
                     Console.Write("\nWould You Like To Continue(Y/N):");
                     ans = Convert.ToChar(Console.ReadLine());
                 } while (ans == 'y' || ans == 'Y');
@@ -355,10 +353,11 @@ namespace IT502_A2_Programming1__764703669_1
                 Console.WriteLine("Format Exception Please try again ");
             }
             finally
-            {//will ask the user twice
+            {//will ask the user everytime
                 Console.Write("\nWould You Like To Continue(Y/N):");
                 ans = Convert.ToChar(Console.ReadLine());
-                if (ans == 'y' || ans == 'Y')
+
+                if (ans == 'y' || ans == 'Y')//If the user replies Y, will go back to the main page
                 {
                     Main(args);
                 }
